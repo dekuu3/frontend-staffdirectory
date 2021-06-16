@@ -1,53 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import { Avatar, Divider, List, ListItem, ListItemText, ListItemAvatar } from "@material-ui/core";
+import { Avatar, List, ListItem, ListItemText, ListItemAvatar, Typography, Box } from "@material-ui/core";
 
 import { userService, authenticationService } from "@/_services";
 
-class HomePage extends React.Component {
-  constructor(props) {
-    super(props);
+function HomePage(props) {
+  const [users, setUsers] = useState(null);
 
-    this.state = {
-      currentUser: authenticationService.currentUserValue,
-      users: null,
-    };
-  }
+  useEffect(() => {
+    userService.getAll().then((users) => setUsers(users));
+  })
 
-  componentDidMount() {
-    userService.getAll().then((users) => this.setState({ users }));
-  }
-
-  render() {
-    const { currentUser, users } = this.state;
-    return (
-      <div>
-        <h1>Hi {currentUser.firstName}!</h1>
-        <p>You're logged in!</p>
-        <h3>Users list:</h3>
-        {users && (
-          <List height={400} width={300}>
-            {users.map((user, index) => (
-              <span key={index}>
-                <ListItem divider={true}>
-                  <ListItemAvatar>
-                    <Avatar alt={user.firstName + " " + user.lastName} src="../../img/profile-user.png" />
-                  </ListItemAvatar>
-                  <ListItemText primary={user.firstName + " " + user.lastName} secondary={
-                    user.email && user.phoneNo &&
-                    <React.Fragment>
-                      {user.email} <br />
-                      {user.phoneNo}
-                    </React.Fragment>
-                  } />
-                </ListItem>
-              </span>
-            ))}
-          </List>
-        )}
-      </div>
-    );
-  }
+  return (
+    <div>
+      <Box px={3} pt={3}>
+        <Typography variant="h4" m={4}>Users:</Typography>
+      </Box>
+      {users && (
+        <List height={400} width={300}>
+          {users.map((user, index) => (
+            <Box p={2} key={index}>
+              <ListItem divider={true}>
+                <ListItemAvatar>
+                  <Avatar alt={user.firstName + " " + user.lastName} src="../../img/profile-user.png" />
+                </ListItemAvatar>
+                <ListItemText primary={user.firstName + " " + user.lastName} secondary={
+                  user.email && user.phoneNo &&
+                  <React.Fragment>
+                    {user.email} <br />
+                    {user.phoneNo}
+                  </React.Fragment>
+                } />
+              </ListItem>
+            </Box>
+          ))}
+        </List>
+      )}
+    </div>
+  );
 }
+
 
 export { HomePage };
