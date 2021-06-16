@@ -1,5 +1,7 @@
 import React from "react";
 
+import { Avatar, Divider, List, ListItem, ListItemText, ListItemAvatar } from "@material-ui/core";
+
 import { userService, authenticationService } from "@/_services";
 
 class HomePage extends React.Component {
@@ -24,13 +26,23 @@ class HomePage extends React.Component {
         <p>You're logged in!</p>
         <h3>Users list:</h3>
         {users && (
-          <ul>
-            {users.map((user) => (
-              <li key={user.id}>
-                {user.firstName} {user.lastName}
-              </li>
+          <List height={400} width={300}>
+            {users.map((user, index) => (
+              <span key={index}>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar alt={user.firstName + " " + user.lastName} src="../../img/profile-user.png" />
+                  </ListItemAvatar>
+                  <ListItemText primary={user.firstName + " " + user.lastName} secondary={
+                    <React.Fragment>
+                      test.test@test.com
+                    </React.Fragment>
+                  } />
+                </ListItem>
+                <Divider variant="inset" component="li" />
+              </span>
             ))}
-          </ul>
+          </List>
         )}
       </div>
     );
