@@ -29,17 +29,18 @@ class HomePage extends React.Component {
           <List height={400} width={300}>
             {users.map((user, index) => (
               <span key={index}>
-                <ListItem>
+                <ListItem divider={true}>
                   <ListItemAvatar>
                     <Avatar alt={user.firstName + " " + user.lastName} src="../../img/profile-user.png" />
                   </ListItemAvatar>
                   <ListItemText primary={user.firstName + " " + user.lastName} secondary={
+                    user.email && user.phoneNo &&
                     <React.Fragment>
-                      test.test@test.com
+                      {user.email} <br />
+                      {user.phoneNo}
                     </React.Fragment>
                   } />
                 </ListItem>
-                <Divider variant="inset" component="li" />
               </span>
             ))}
           </List>
