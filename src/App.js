@@ -1,56 +1,83 @@
-import React from 'react';
-import { Router, Route, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Router, Route, Link, withRouter } from 'react-router-dom';
+
+import { AppBar, Button, makeStyles, Toolbar } from '@material-ui/core';
 
 import { history } from '@/_helpers';
 import { authenticationService } from '@/_services';
 import { PrivateRoute } from '@/_components';
 import { HomePage, LoginPage } from '@/Pages';
 
-class App extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            currentUser: null
-        };
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1
+    },
+    navButtonLeft: {
+        marginLeft: theme.spacing(2)
+    },
+    navButtonRight: {
+        marginRight: theme.spacing(2)
+    },
+    title: {
+        flexGrow: 1
     }
+}));
 
-    componentDidMount() {
-        authenticationService.currentUser.subscribe(x => this.setState({ currentUser: x }));
-    }
+function App(props) {
+    const [currentUser, setCurrentUser] = useState();
 
-    logout() {
+    useEffect(() => {
+        authenticationService.currentUser.subscribe(x => setCurrentUser(x));
+    })
+
+    function logout() {
         authenticationService.logout();
-        history.push('/login');
+        props.history.push('/login');
     }
 
-    render() {
-        const { currentUser } = this.state;
-        return (
-            <Router history={history}>
-                <div>
-                    {currentUser &&
-                        <nav className="navbar navbar-expand navbar-dark bg-dark">
-                            <div className="navbar-nav">
-                                <Link to="/" className="nav-item nav-link">Home</Link>
-                                <a onClick={this.logout} className="nav-item nav-link">Logout</a>
-                            </div>
-                        </nav>
-                    }
-                    <div className="jumbotron">
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-md-6 offset-md-3">
-                                    <PrivateRoute exact path="/" component={HomePage} />
-                                    <Route path="/login" component={LoginPage} />
-                                </div>
+    const classes = useStyles();
+
+    return (
+        <Router history={history}>
+            <div className={classes.root}>
+                {(currentUser != null) &&
+                    <AppBar position="static">
+                        <Toolbar>
+                            <Button
+                                edge="start"
+                                className={classes.navButtonLeft}
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={() => { props.history.replace('/') }}
+                            >
+                                Home
+                            </Button>
+                            <Button
+                                edge="start"
+                                className={classes.navButtonLeft}
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={logout}
+                            >
+                                Logout
+                            </Button>
+                        </Toolbar>
+                    </AppBar>
+                }
+                <div className="jumbotron">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-md-6 offset-md-3">
+                                <PrivateRoute exact path="/" component={HomePage} />
+                                <Route path="/login" component={LoginPage} />
                             </div>
                         </div>
                     </div>
                 </div>
-            </Router>
-        );
-    }
+            </div>
+        </Router>
+    );
+
 }
 
-export { App };
+export default withRouter(App)
