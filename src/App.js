@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Router, Route, withRouter } from 'react-router-dom';
+import { Router, Route, Switch, withRouter } from 'react-router-dom';
 
-import { AppBar, Button, Container, makeStyles, ThemeProvider, Toolbar, withTheme } from '@material-ui/core';
+import { AppBar, Button, Container, IconButton, makeStyles, Toolbar } from '@material-ui/core';
+import { AccountCircle } from '@material-ui/icons'
 
 import { history } from '@/_helpers';
 import { authenticationService } from '@/_services';
 import { PrivateRoute } from '@/_components';
-import { HomePage, LoginPage } from '@/Pages';
+import { HomePage, LoginPage, ProfilePage } from '@/Pages';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -16,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(2)
     },
     navButtonRight: {
+        marginLeft: "auto",
         marginRight: theme.spacing(2)
     },
     title: {
@@ -47,7 +49,7 @@ function App(props) {
                             className={classes.navButtonLeft}
                             color="inherit"
                             aria-label="open drawer"
-                            onClick={() => { props.history.replace('/') }}
+                            onClick={() => { history.replace('/') }}
                         >
                             Home
                         </Button>
@@ -60,18 +62,26 @@ function App(props) {
                         >
                             Logout
                         </Button>
+                        <IconButton
+                            edge="end"
+                            className={classes.navButtonRight}
+                            aria-label="account of current user"
+                            aria-controls="appbar-account"
+                            aria-haspopup="true"
+                            color="inherit"
+                            onClick={() => history.replace("/user/profile")}
+                        >
+                            <AccountCircle />
+                        </IconButton>
                     </Toolbar>
                 </AppBar>
             }
             <Container fixed>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-6 offset-md-3">
-                            <PrivateRoute exact path="/" component={HomePage} />
-                            <Route path="/login" component={LoginPage} />
-                        </div>
-                    </div>
-                </div>
+                <Switch>
+                    <PrivateRoute exact path="/" component={HomePage} />
+                    <PrivateRoute path="/user/profile" component={ProfilePage} />
+                    <Route path="/login" component={LoginPage} />
+                </Switch>
             </Container>
         </Router>
     );

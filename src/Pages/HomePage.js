@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-import { Avatar, List, ListItem, ListItemText, ListItemAvatar, Typography, Box } from "@material-ui/core";
+import { Avatar, List, ListItem, ListItemText, ListItemAvatar, Snackbar, Typography, Box } from "@material-ui/core";
+import { Alert } from '@material-ui/lab';
 
 import { userService, authenticationService } from "@/_services";
 
 function HomePage(props) {
   const [users, setUsers] = useState(null);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     userService.getAll().then((users) => setUsers(users));
@@ -22,7 +24,7 @@ function HomePage(props) {
             <Box p={2} key={index}>
               <ListItem divider={true}>
                 <ListItemAvatar>
-                  <Avatar alt={user.firstName + " " + user.lastName} src="../../img/profile-user.png" />
+                  <Avatar alt={user.firstName + " " + user.lastName + "'s Avatar"} src="../../img/profile-user.png" />
                 </ListItemAvatar>
                 <ListItemText primary={user.firstName + " " + user.lastName} secondary={
                   user.email && user.phoneNo &&
@@ -36,6 +38,9 @@ function HomePage(props) {
           ))}
         </List>
       )}
+      <Snackbar open={isError} autoHideDuration={2000} onClose={() => setIsError(false)}>
+        <Alert elevation={6} variant="filled" severity="error">You are not authorised to access that page</Alert>
+      </Snackbar >
     </div>
   );
 }
