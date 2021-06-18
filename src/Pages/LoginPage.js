@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 
 // UI imports
-import { Button, Box, Grid, TextField, Typography, CircularProgress } from '@material-ui/core';
+import { Backdrop, Button, Box, Grid, TextField, Typography, CircularProgress } from '@material-ui/core';
 
 // Other file imports
 import { authenticationService } from '@/_services';
@@ -18,12 +18,10 @@ const schema = yup.object().shape({
 })
 
 function LoginPage(props) {
-    const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful } } = useForm({
+    const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitted } } = useForm({
         mode: "all",
         resolver: yupResolver(schema)
     });
-
-    const [loginFailed, setLoginFailed] = useState(false);
 
     // redirect to home if already logged in
     if (authenticationService.currentUserValue) {
@@ -35,9 +33,6 @@ function LoginPage(props) {
             .then(
                 user => {
                     const { from } = props.location.state || { from: { pathName: "/" } };
-                },
-                error => {
-                    setLoginFailed(true);
                 }
             )
     }
@@ -58,11 +53,11 @@ function LoginPage(props) {
                     </Box>
                     <Box py={1}>
                         <Button type="submit" variant="contained" disabled={isSubmitting}>Login</Button>
-                        {isSubmitting &&
-                            <CircularProgress />
-                        }
+
+                        <Backdrop open={isSubmitting}><CircularProgress /></Backdrop>
+
                     </Box>
-                    {loginFailed && <div className={'alert alert-danger'}>Username or password is incorrect</div>}
+                    {isSubmitted && <Typography>Username or password is incorrect</Typography>}
                 </form>
             </Box>
         </Grid>
