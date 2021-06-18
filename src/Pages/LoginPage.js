@@ -18,7 +18,9 @@ const schema = yup.object().shape({
 })
 
 function LoginPage(props) {
-    const { register, handleSubmit, formState: { errors, isSubmitting, isSubmitted } } = useForm({
+    const [error, setError] = useState(null);
+
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
         mode: "all",
         resolver: yupResolver(schema)
     });
@@ -33,7 +35,8 @@ function LoginPage(props) {
             .then(
                 user => {
                     const { from } = props.location.state || { from: { pathName: "/" } };
-                }
+                },
+                error => setError(error)
             )
     }
 
@@ -57,7 +60,7 @@ function LoginPage(props) {
                         <Backdrop open={isSubmitting}><CircularProgress /></Backdrop>
 
                     </Box>
-                    {isSubmitted && <Typography>Username or password is incorrect</Typography>}
+                    {error && <Typography>{error}</Typography>}
                 </form>
             </Box>
         </Grid>
