@@ -1,18 +1,39 @@
 import React, { useEffect, useState } from 'react';
 
-import { Avatar, Box, Button, Card, CardHeader, Grid, TextField } from '@material-ui/core';
+import { Avatar, Box, Button, Card, CardHeader, Grid, makeStyles, TextField } from '@material-ui/core';
 
 import { authenticationService, userService } from '../_services';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '& .MuiTextField-root': {
+            margin: theme.spacing(1),
+            width: '25ch'
+        }
+    }
+}))
 
 function ProfilePage(props) {
     const currentUser = authenticationService.currentUserValue;
 
+    const [firstName, setFirstName] = useState(currentUser.firstName);
+    const [lastName, setLastName] = useState(currentUser.lastName);
     const [phoneNo, setPhoneNo] = useState(currentUser.phoneNo);
     const [email, setEmail] = useState(currentUser.email);
 
     const [isEditing, setEdit] = useState(false);
 
-    console.log(currentUser);
+    const classes = useStyles();
+
+    function onChange(setter, changedProperty) {
+        let body = currentUser;
+
+        return (event => {
+            setter(event.target.value);
+            body[changedProperty] = event.target.value;
+            userService.editCurrent(body);
+        })
+    }
 
     return (
         <Box m={3}>
@@ -24,30 +45,23 @@ function ProfilePage(props) {
                     action={
                         <Button onClick={() => {
                             setEdit(!isEditing);
-                            if (isEditing) {
-
-                            }
                         }}>
                             {isEditing ? "Done" : "Edit"}
                         </Button>
                     }
-                    title={currentUser.firstName + " " + currentUser.lastName}
+                    title={firstName + " " + lastName}
                     subheader={currentUser.position} />
-                <Box p={5}>
-                    <Grid
-                        container
-                        direction="column"
-                        justify="flex-start"
-                        alignItems="stretch"
-                        spacing={3}
-                    >
-                        <Grid item >
-                            <TextField label="Phone No." variant={isEditing ? "standard" : "filled"} disabled={!isEditing} value={phoneNo} onChange={event => setPhoneNo(event.target.value)} />
-                        </Grid>
-                        <Grid item>
-                            <TextField label="Email" variant={isEditing ? "standard" : "filled"} disabled={!isEditing} value={email} onChange={event => setEmail(event.target.value)} />
-                        </Grid>
-                    </Grid>
+                <Box p={5} className={classes.root}>
+                    <div>
+                        <TextField label="First Name" variant="filled" disabled={!isEditing} value={firstName} onChange={onChange(setFirstName, "firstName")} />
+                        <TextField label="Last Name" variant="filled" disabled={!isEditing} value={lastName} onChange={onChange(setLastName, "lastName")} />
+                    </div>
+                    <div>
+                        <TextField label="Phone No." variant="filled" disabled={!isEditing} value={phoneNo} onChange={onChange(setPhoneNo, "phoneNo")} />
+                    </div>
+                    <div>
+                        <TextField label="Email" variant="filled" disabled={!isEditing} value={email} onChange={onChange(setEmail, "email")} />
+                    </div>
                 </Box>
             </Card>
         </Box>)
