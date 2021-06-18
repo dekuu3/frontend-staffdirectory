@@ -23,15 +23,29 @@ function ProfilePage(props) {
 
     const [isEditing, setEdit] = useState(false);
 
+    const [first, setFirst] = useState(true);
+
     const classes = useStyles();
 
+    // Reload user data on first render (to account for db changes)
+    useEffect(() => {
+        if (first) {
+            console.log('?');
+            userService.getCurrent().then(user => {
+                setFirstName(user.firstName);
+                setLastName(user.lastName);
+                setPhoneNo(user.phoneNo);
+                setEmail(user.email);
+            });
+            setFirst(false);
+        }
+    });
+
     function onChange(setter, changedProperty) {
-        let body = currentUser;
 
         return (event => {
             setter(event.target.value);
-            body[changedProperty] = event.target.value;
-            userService.editCurrent(body);
+            userService.editCurrent({ [changedProperty]: event.target.value });
         })
     }
 
