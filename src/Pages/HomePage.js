@@ -11,6 +11,22 @@ function HomePage(props) {
     userService.getAll().then((users) => setUsers(users));
   })
 
+  function makeSubtitle(user) {
+    var email;
+    var phoneNo;
+    if (user.email) {
+      email = user.email;
+    }
+    if (phoneNo) {
+      phoneNo = ", " + user.phoneNo;
+    }
+
+    return (<React.Fragment>
+      {email}{phoneNo}
+    </React.Fragment>)
+  }
+
+
   return (
     <div>
       <Box px={3} pt={3}>
@@ -25,11 +41,7 @@ function HomePage(props) {
                   <Avatar alt={user.firstName + " " + user.lastName} src="../../img/profile-user.png" />
                 </ListItemAvatar>
                 <ListItemText primary={user.firstName + " " + user.lastName} secondary={
-                  user.email && user.phoneNo &&
-                  <React.Fragment>
-                    {user.email} <br />
-                    {user.phoneNo}
-                  </React.Fragment>
+                  makeSubtitle(user)
                 } />
               </ListItem>
             </Box>
