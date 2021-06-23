@@ -5,7 +5,8 @@ import { authenticationService } from '.';
 export const userService = {
     getAll,
     getCurrent,
-    editCurrent
+    editCurrent,
+    addNew
 };
 
 function getAll() {
@@ -24,4 +25,13 @@ function editCurrent(body) {
     const requestOptions = { method: 'PUT', headers, body: (JSON.stringify(body)) };
 
     return fetch(`${config.apiUrl}/users/myprofile/edit`, requestOptions).then(handleResponse);
+}
+
+function addNew(user) {
+    let headers = authHeader();
+    headers["Content-Type"] = "application/json";
+    const requestOptions = { method: 'POST', headers, body: (JSON.stringify(user)) };
+
+    console.log(user);
+    return fetch(`${config.apiUrl}/users/adduser`, requestOptions).then(handleResponse);
 }
