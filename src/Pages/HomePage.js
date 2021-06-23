@@ -55,7 +55,7 @@ function HomePage(props) {
                 <ListItemText primary={user.firstName + " " + user.lastName} secondary={
                   makeSubtitle(user)
                 } />
-                {(user.id != currentUser.id) && <ListItemSecondaryAction>
+                {(user.id != currentUser.id) && (currentUser.role == "Admin") && <ListItemSecondaryAction>
                   <IconButton edge="end" onClick={() => userService.remove(user.id)} >
                     <Delete />
                   </IconButton>
