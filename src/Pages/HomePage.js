@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-import { Avatar, Grid, List, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core'
+import { Avatar, IconButton, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText } from '@material-ui/core'
 import { Box, Typography } from "@material-ui/core";
-import { Backdrop, Fab, Tooltip } from "@material-ui/core";
-import { Add } from "@material-ui/icons";
+import { Fab, Tooltip } from "@material-ui/core";
+import { Add, Delete } from "@material-ui/icons";
 
 import { userService, authenticationService } from "@/_services";
 import { UserForm } from "../_components";
@@ -55,6 +55,11 @@ function HomePage(props) {
                 <ListItemText primary={user.firstName + " " + user.lastName} secondary={
                   makeSubtitle(user)
                 } />
+                {(user.id != currentUser.id) && <ListItemSecondaryAction>
+                  <IconButton edge="end" onClick={() => userService.remove(user.id)} >
+                    <Delete />
+                  </IconButton>
+                </ListItemSecondaryAction>}
               </ListItem>
             </Box>
           ))}

@@ -6,7 +6,8 @@ export const userService = {
     getAll,
     getCurrent,
     editCurrent,
-    addNew
+    addNew,
+    remove
 };
 
 function getAll() {
@@ -34,4 +35,13 @@ function addNew(user) {
 
     console.log(user);
     return fetch(`${config.apiUrl}/users/adduser`, requestOptions).then(handleResponse);
+}
+
+function remove(userId) {
+    let headers = authHeader();
+    headers["Content-Type"] = "application/json";
+    const requestOptions = { method: 'DELETE', headers };
+
+    console.log(userId);
+    return fetch(`${config.apiUrl}/users/${userId}/delete`, requestOptions).then(handleResponse);
 }
