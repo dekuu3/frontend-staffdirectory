@@ -40,7 +40,7 @@ function HomePage(props) {
 
   return (
     <div>
-      <UserForm open={isAdding} onSubmit={setIsAdding} />
+      <UserForm open={isAdding} setOpen={setIsAdding} />
       <Box px={3} pt={3}>
         <Typography variant="h4" m={4}>Users:</Typography>
       </Box>
@@ -56,7 +56,7 @@ function HomePage(props) {
                   makeSubtitle(user)
                 } />
                 {(user.id != currentUser.id) && (currentUser.role == "Admin") && <ListItemSecondaryAction>
-                  <IconButton edge="end" onClick={() => userService.remove(user.id)} >
+                  <IconButton edge="end" onClick={() => { console.log(user); userService.remove(user.id) }} >
                     <Delete />
                   </IconButton>
                 </ListItemSecondaryAction>}
@@ -78,9 +78,10 @@ function HomePage(props) {
               </ListItem>
             </Box>}
         </List>
-      )}
+      )
+      }
 
-    </div>
+    </div >
   );
 }
 
