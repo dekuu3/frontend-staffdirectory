@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 import { Avatar, IconButton, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText } from '@material-ui/core'
-import { Box, Typography } from "@material-ui/core";
-import { Fab, Tooltip } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
+import { Button, Dialog, DialogContent, DialogTitle, Fab, Tooltip } from "@material-ui/core";
 import { Add, Delete } from "@material-ui/icons";
 
 import { userService, authenticationService } from "@/_services";
@@ -13,6 +13,9 @@ function HomePage(props) {
 
   const [users, setUsers] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const [userToDelete, setUserToDelete] = useState({});
 
   useEffect(() => {
     userService.getAll().then((users) => setUsers(users));
@@ -56,7 +59,7 @@ function HomePage(props) {
                   makeSubtitle(user)
                 } />
                 {(user.id != currentUser.id) && (currentUser.role == "Admin") && <ListItemSecondaryAction>
-                  <IconButton edge="end" onClick={() => { console.log(user); userService.remove(user.id) }} >
+                  <IconButton edge="end" onClick={() => { setIsDeleting(true); setUserToDelete(user); }} >
                     <Delete />
                   </IconButton>
                 </ListItemSecondaryAction>}
@@ -80,6 +83,25 @@ function HomePage(props) {
         </List>
       )
       }
+
+      <Dialog open={isDeleting} onClose={() => setIsDeleting(false)}>
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <Grid container direction="column" spacing={1}>
+            <Grid container>
+              <Typography>Are you sure you want to delete {userToDelete.firstName}?</Typography> <br />
+            </Grid>
+            <Grid container spacing={2}>
+              <Grid item>
+                <Button variant="contained" onClick={() => { userService.remove(userToDelete.id); setIsDeleting(false) }}>Yes</Button>
+              </Grid>
+              <Grid item>
+                <Button variant="contained" onClick={() => setIsDeleting(false)}>No</Button>
+              </Grid>
+            </Grid>
+          </Grid>
+        </DialogContent>
+      </Dialog>
 
     </div >
   );
