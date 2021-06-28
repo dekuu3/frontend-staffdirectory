@@ -44,9 +44,7 @@ function UserForm(props) {
             setValue("supervisor", user.supervisor);
             setValue("email", user.email);
 
-            console.log(getValues(), user);
         } else {
-            console.log(getValues())
         }
     })
 

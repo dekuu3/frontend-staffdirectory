@@ -34,7 +34,6 @@ function addNew(user) {
     headers["Content-Type"] = "application/json";
     const requestOptions = { method: 'POST', headers, body: (JSON.stringify(user)) };
 
-    console.log(user);
     return fetch(`${config.apiUrl}/users/adduser`, requestOptions).then(handleResponse);
 }
 
@@ -43,7 +42,6 @@ function remove(userId) {
     headers["Content-Type"] = "application/json";
     const requestOptions = { method: 'DELETE', headers };
 
-    console.log(userId);
     return fetch(`${config.apiUrl}/users/${userId}/delete`, requestOptions).then(handleResponse);
 }
 

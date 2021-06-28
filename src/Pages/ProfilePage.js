@@ -30,7 +30,7 @@ function ProfilePage(props) {
     // Reload user data on first render (to account for db changes)
     useEffect(() => {
         if (first) {
-            console.log('?');
+
             userService.getCurrent().then(user => {
                 setFirstName(user.firstName);
                 setLastName(user.lastName);
