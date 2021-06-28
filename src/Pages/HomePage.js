@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Avatar, IconButton, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText } from '@material-ui/core'
 import { Box, Grid, Typography } from "@material-ui/core";
 import { Button, Dialog, DialogContent, DialogTitle, Fab, Tooltip } from "@material-ui/core";
-import { Add, Delete } from "@material-ui/icons";
+import { Add, Delete, MoreHoriz as More } from "@material-ui/icons";
 
 import { userService, authenticationService } from "@/_services";
 import { UserForm } from "../_components";
@@ -13,9 +13,10 @@ function HomePage(props) {
 
   const [users, setUsers] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const [userToDelete, setUserToDelete] = useState({});
+  const [relevantUser, setUser] = useState({});
 
   useEffect(() => {
     userService.getAll().then((users) => setUsers(users));
@@ -40,10 +41,33 @@ function HomePage(props) {
     </React.Fragment>)
   }
 
+  var editDialog = (<Dialog open={isEditing} onClose={() => setIsEditing(false)}>
+
+  </Dialog>)
+
+  var deleteDialog = (<Dialog open={isDeleting} onClose={() => setIsDeleting(false)}>
+    <DialogTitle>Confirm Deletion</DialogTitle>
+    <DialogContent>
+      <Grid container direction="column" spacing={1}>
+        <Grid container>
+          <Typography>Are you sure you want to delete {relevantUser.firstName} {relevantUser.lastName}?</Typography> <br />
+        </Grid>
+        <Grid container spacing={2}>
+          <Grid item>
+            <Button variant="contained" onClick={() => { userService.remove(relevantUser.id); setIsDeleting(false) }}>Yes</Button>
+          </Grid>
+          <Grid item>
+            <Button variant="contained" onClick={() => setIsDeleting(false)}>No</Button>
+          </Grid>
+        </Grid>
+      </Grid>
+    </DialogContent>
+  </Dialog>)
 
   return (
     <div>
-      <UserForm open={isAdding} setOpen={setIsAdding} />
+      <UserForm open={isAdding} setOpen={setIsAdding} type="add" />
+      <UserForm open={isEditing} user={relevantUser} setOpen={setIsEditing} type="edit" />
       <Box px={3} pt={3}>
         <Typography variant="h4" m={4}>Users:</Typography>
       </Box>
@@ -58,11 +82,21 @@ function HomePage(props) {
                 <ListItemText primary={user.firstName + " " + user.lastName} secondary={
                   makeSubtitle(user)
                 } />
-                {(user.id != currentUser.id) && (currentUser.role == "Admin") && <ListItemSecondaryAction>
-                  <IconButton edge="end" onClick={() => { setIsDeleting(true); setUserToDelete(user); }} >
-                    <Delete />
-                  </IconButton>
-                </ListItemSecondaryAction>}
+                {(user.id != currentUser.id) && (currentUser.role == "Admin") &&
+                  <ListItemSecondaryAction>
+                    <Grid container spacing={2}>
+                      <Grid item>
+                        <IconButton edge="end" onClick={() => { setIsEditing(true); setUser(user) }} >
+                          <More />
+                        </IconButton>
+                      </Grid>
+                      <Grid item>
+                        <IconButton edge="end" onClick={() => { setIsDeleting(true); setUser(user); }} >
+                          <Delete />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
+                  </ListItemSecondaryAction>}
               </ListItem>
             </Box>
           ))}
@@ -84,28 +118,10 @@ function HomePage(props) {
       )
       }
 
-      <Dialog open={isDeleting} onClose={() => setIsDeleting(false)}>
-        <DialogTitle>Confirm Deletion</DialogTitle>
-        <DialogContent>
-          <Grid container direction="column" spacing={1}>
-            <Grid container>
-              <Typography>Are you sure you want to delete {userToDelete.firstName}?</Typography> <br />
-            </Grid>
-            <Grid container spacing={2}>
-              <Grid item>
-                <Button variant="contained" onClick={() => { userService.remove(userToDelete.id); setIsDeleting(false) }}>Yes</Button>
-              </Grid>
-              <Grid item>
-                <Button variant="contained" onClick={() => setIsDeleting(false)}>No</Button>
-              </Grid>
-            </Grid>
-          </Grid>
-        </DialogContent>
-      </Dialog>
+      {deleteDialog}
 
     </div >
   );
 }
-
 
 export { HomePage };

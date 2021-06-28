@@ -7,7 +7,8 @@ export const userService = {
     getCurrent,
     editCurrent,
     addNew,
-    remove
+    remove,
+    edit
 };
 
 function getAll() {
@@ -44,4 +45,12 @@ function remove(userId) {
 
     console.log(userId);
     return fetch(`${config.apiUrl}/users/${userId}/delete`, requestOptions).then(handleResponse);
+}
+
+function edit(userId, user) {
+    let headers = authHeader();
+    headers["Content-Type"] = "application/json";
+    const requestOptions = { method: 'PUT', headers, body: (JSON.stringify(user)) }
+
+    return fetch(`${config.apiUrl}/users/${userId}/edit`, requestOptions).then(handleResponse);
 }
