@@ -10,6 +10,10 @@ Then navigate to `localhost:8080` to access.
 
 
 ### Authors
-Base: From [this tutorial](https://jasonwatmore.com/post/2019/04/06/react-jwt-authentication-tutorial-example), implemented by David Lazaro
+* Base: From [this tutorial](https://jasonwatmore.com/post/2019/04/06/react-jwt-authentication-tutorial-example), implemented by David,
+* CSS Library: [MaterialUI](https://material-ui.com/), implemented by Ewan,
+* Frontend Functionality: Ewan,
+* Backend: David, more [here](https://github.com/dekuu3/backend-staffdirectory).
 
-CSS Library: [MaterialUI](https://material-ui.com/), implemented by Ewan Spence
+
+
