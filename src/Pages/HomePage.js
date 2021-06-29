@@ -27,13 +27,6 @@ function HomePage(props) {
 
     if (user.email) {
       subtitle = user.email;
-
-      if (user.phoneNo) {
-        subtitle += ", " + user.phoneNo;
-      }
-    }
-    else if (user.phoneNo) {
-      subtitle = user.phoneNo;
     }
 
     return (<React.Fragment>
@@ -41,9 +34,7 @@ function HomePage(props) {
     </React.Fragment>)
   }
 
-  var editDialog = (<Dialog open={isEditing} onClose={() => setIsEditing(false)}>
 
-  </Dialog>)
 
   var deleteDialog = (<Dialog open={isDeleting} onClose={() => setIsDeleting(false)}>
     <DialogTitle>Confirm Deletion</DialogTitle>
