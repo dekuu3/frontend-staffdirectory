@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
-import { Avatar, Box, Button, Card, CardContent, CardHeader, CardMedia, Fab, Grid, makeStyles, TextField, Typography } from '@material-ui/core';
+
+import { Avatar, Box, Button, Card, CardHeader, Grid, makeStyles, TextField } from '@material-ui/core';
+import { IconButton, InputAdornment } from '@material-ui/core';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
+
 import { authenticationService, userService } from '../_services';
 
 const useStyles = makeStyles((theme) => ({
@@ -17,11 +21,13 @@ function ProfilePage(props) {
 
     const [firstName, setFirstName] = useState(currentUser.firstName);
     const [lastName, setLastName] = useState(currentUser.lastName);
-    const [phoneNo, setPhoneNo] = useState(currentUser.phoneNo);
+    const [password, setPassword] = useState(null);
     const [email, setEmail] = useState(currentUser.email);
     const [image, setImage] = useState(currentUser.image);
 
     const [isEditing, setEdit] = useState(false);
+
+    const [showPassword, setShowPassword] = useState(false);
 
     const [first, setFirst] = useState(true);
 
@@ -34,7 +40,6 @@ function ProfilePage(props) {
             userService.getCurrent().then(user => {
                 setFirstName(user.firstName);
                 setLastName(user.lastName);
-                setPhoneNo(user.phoneNo);
                 setEmail(user.email);
 
                 if (user.image) {
@@ -81,7 +86,15 @@ function ProfilePage(props) {
                                 <TextField label="Last Name" variant="filled" disabled={!isEditing} value={lastName} onChange={onChange(setLastName, "lastName")} />
                             </div>
                             <div>
-                                <TextField label="Phone No." variant="filled" disabled={!isEditing} value={phoneNo} onChange={onChange(setPhoneNo, "phoneNo")} />
+                                <TextField label="New Password" variant="filled" type={showPassword ? "text" : "password"} value={password} onChange={onChange(setPassword, "password")} InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton onClick={() => setShowPassword(!showPassword)} >
+                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>),
+                            readOnly: !isEditing
+                        }} />
                             </div>
                             <div>
                                 <TextField label="Email" variant="filled" disabled={!isEditing} value={email} onChange={onChange(setEmail, "email")} />
@@ -117,6 +130,7 @@ function ProfilePage(props) {
                         </Card>
                     </Grid>
                 </Grid>
+
             </Card>
         </Box >)
 }
