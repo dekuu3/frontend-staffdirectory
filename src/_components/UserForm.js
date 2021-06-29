@@ -15,7 +15,6 @@ function UserForm(props) {
     const [showPassword, setShowPassword] = useState(false);
 
     // These are the same regardless of if the user is adding/editing
-    var defaultValues = { role: "User" };
     var schema = {
         firstName: yup.string().required("Name is required"),
         lastName: yup.string().required("Name is required"),
@@ -43,6 +42,7 @@ function UserForm(props) {
             setValue("position", user.position);
             setValue("supervisor", user.supervisor);
             setValue("email", user.email);
+            setValue("role", user.role);
 
         } else {
         }
@@ -51,7 +51,6 @@ function UserForm(props) {
     const { control, register, handleSubmit, formState: { errors, isSubmitting, isDirty, dirtyFields }, getValues, setValue } = useForm({
         mode: "all",
         resolver: yupResolver(yup.object().shape(schema)),
-        defaultValues
     });
 
     // Submit based on op type

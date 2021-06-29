@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 import { Avatar, Box, Button, Card, CardHeader, Grid, makeStyles, TextField } from '@material-ui/core';
+import { IconButton, InputAdornment } from '@material-ui/core';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
+
 
 import { authenticationService, userService } from '../_services';
 
@@ -18,10 +21,12 @@ function ProfilePage(props) {
 
     const [firstName, setFirstName] = useState(currentUser.firstName);
     const [lastName, setLastName] = useState(currentUser.lastName);
-    const [phoneNo, setPhoneNo] = useState(currentUser.phoneNo);
+    const [password, setPassword] = useState(null);
     const [email, setEmail] = useState(currentUser.email);
 
     const [isEditing, setEdit] = useState(false);
+
+    const [showPassword, setShowPassword] = useState(false);
 
     const [first, setFirst] = useState(true);
 
@@ -34,7 +39,6 @@ function ProfilePage(props) {
             userService.getCurrent().then(user => {
                 setFirstName(user.firstName);
                 setLastName(user.lastName);
-                setPhoneNo(user.phoneNo);
                 setEmail(user.email);
             });
             setFirst(false);
@@ -67,14 +71,22 @@ function ProfilePage(props) {
                     subheader={currentUser.position} />
                 <Box p={5} className={classes.root}>
                     <div>
-                        <TextField label="First Name" variant="filled" disabled={!isEditing} value={firstName} onChange={onChange(setFirstName, "firstName")} />
-                        <TextField label="Last Name" variant="filled" disabled={!isEditing} value={lastName} onChange={onChange(setLastName, "lastName")} />
+                        <TextField label="First Name" variant="filled" InputProps={{ readOnly: !isEditing }} value={firstName} onChange={onChange(setFirstName, "firstName")} />
+                        <TextField label="Last Name" variant="filled" InputProps={{ readOnly: !isEditing }} value={lastName} onChange={onChange(setLastName, "lastName")} />
                     </div>
                     <div>
-                        <TextField label="Phone No." variant="filled" disabled={!isEditing} value={phoneNo} onChange={onChange(setPhoneNo, "phoneNo")} />
+                        <TextField label="New Password" variant="filled" type={showPassword ? "text" : "password"} value={password} onChange={onChange(setPassword, "password")} InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton onClick={() => setShowPassword(!showPassword)} >
+                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>),
+                            readOnly: !isEditing
+                        }} />
                     </div>
                     <div>
-                        <TextField label="Email" variant="filled" disabled={!isEditing} value={email} onChange={onChange(setEmail, "email")} />
+                        <TextField label="Email" variant="filled" InputProps={{ readOnly: !isEditing }} value={email} onChange={onChange(setEmail, "email")} />
                     </div>
                 </Box>
             </Card>
