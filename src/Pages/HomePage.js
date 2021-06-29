@@ -77,7 +77,7 @@ function HomePage(props) {
             <Box p={2} key={index}>
               <ListItem divider={true}>
                 <ListItemAvatar>
-                  <Avatar alt={user.firstName + " " + user.lastName + "'s Avatar"} src="../../img/profile-user.png" />
+                  <Avatar alt={user.firstName + " " + user.lastName + "'s Avatar"} src={user.image} />
                 </ListItemAvatar>
                 <ListItemText primary={user.firstName + " " + user.lastName} secondary={
                   makeSubtitle(user)

@@ -55,7 +55,6 @@ function UserForm(props) {
 
     // Submit based on op type
     function onSubmit(user, e) {
-        console.log(user);
 
         if (props.type == "add") {
             userService.addNew(user)
