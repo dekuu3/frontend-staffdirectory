@@ -21,7 +21,7 @@ function UserForm(props) {
         username: yup.string().required("Username is required"),
         role: yup.string().required("Role is required"),
         position: yup.string().required("Position is required"),
-        supervisor: yup.string(),
+        supervisor: yup.string().required("Supervisor is required"),
         email: yup.string().email().required("Email is required"),
     }
 
@@ -125,7 +125,7 @@ function UserForm(props) {
                                 </TextField>
                             </Grid>
                             <Grid item>
-                                <MyTextField control={control} errors={errors} property="supervisor" label="Supervisor" />
+                                <MyTextField control={control} required errors={errors} property="supervisor" label="Supervisor" />
                             </Grid>
                             <Grid item>
                                 <MyTextField control={control} required errors={errors} property="position" label="Position" />

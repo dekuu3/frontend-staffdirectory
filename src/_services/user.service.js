@@ -1,6 +1,5 @@
 import config from 'config';
 import { authHeader, handleResponse } from '@/_helpers';
-import { authenticationService } from '.';
 
 export const userService = {
     getAll,
@@ -14,11 +13,15 @@ export const userService = {
 
 function getAll() {
     const requestOptions = { method: 'GET', headers: authHeader() };
+
+    //console.log("Getting all users");
     return fetch(`${config.apiUrl}/users`, requestOptions).then(handleResponse);
 }
 
 function getCurrent() {
     const requestOptions = { method: 'GET', headers: authHeader() };
+
+    //console.log("Getting current user info");
     return fetch(`${config.apiUrl}/users/myprofile`, requestOptions).then(handleResponse);
 }
 
@@ -27,6 +30,7 @@ function editCurrent(body) {
     headers["Content-Type"] = "application/json";
     const requestOptions = { method: 'PUT', headers, body: (JSON.stringify(body)) };
 
+    //console.log("Editing current user info", body);
     return fetch(`${config.apiUrl}/users/myprofile/edit`, requestOptions).then(handleResponse);
 }
 
@@ -41,6 +45,7 @@ function editImage(file) {
 
     const requestOptions = { method: 'POST', headers, body: formData };
 
+    //console.log("Editing current user image");
     return fetch(`${config.apiUrl}/users/myprofile/edit/image`, requestOptions).then(handleResponse);
 }
 
@@ -49,6 +54,7 @@ function addNew(user) {
     headers["Content-Type"] = "application/json";
     const requestOptions = { method: 'POST', headers, body: (JSON.stringify(user)) };
 
+    //console.log("Adding new user", user);
     return fetch(`${config.apiUrl}/users/adduser`, requestOptions).then(handleResponse);
 }
 
@@ -57,6 +63,7 @@ function remove(userId) {
     headers["Content-Type"] = "application/json";
     const requestOptions = { method: 'DELETE', headers };
 
+    //console.log("Removing user by id", userId);
     return fetch(`${config.apiUrl}/users/${userId}/delete`, requestOptions).then(handleResponse);
 }
 
@@ -65,5 +72,6 @@ function edit(userId, user) {
     headers["Content-Type"] = "application/json";
     const requestOptions = { method: 'PUT', headers, body: (JSON.stringify(user)) }
 
+    //console.log("Editing user by id", user, userId);
     return fetch(`${config.apiUrl}/users/${userId}/edit`, requestOptions).then(handleResponse);
 }
