@@ -6,6 +6,7 @@ export const userService = {
     getAll,
     getCurrent,
     editCurrent,
+    editImage,
     addNew,
     remove,
     edit
@@ -27,6 +28,20 @@ function editCurrent(body) {
     const requestOptions = { method: 'PUT', headers, body: (JSON.stringify(body)) };
 
     return fetch(`${config.apiUrl}/users/myprofile/edit`, requestOptions).then(handleResponse);
+}
+
+function editImage(file) {
+    let headers = authHeader();
+
+    const formData = new FormData();
+    formData.append(
+        "file",
+        file
+    );
+
+    const requestOptions = { method: 'POST', headers, body: formData };
+
+    return fetch(`${config.apiUrl}/users/myprofile/edit/image`, requestOptions).then(handleResponse);
 }
 
 function addNew(user) {
